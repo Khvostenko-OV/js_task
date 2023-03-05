@@ -1,0 +1,23 @@
+<p>Hello! World!</p>
+<script>
+    const maxNum = 10
+    const num = Math.floor(Math.random() * (maxNum + 1));
+    console.log('Guess -', num);
+    let i = 0
+    while (true) {
+        const userNumber = +prompt("Введите число от 0 до " + maxNum)
+        if (isNaN(userNumber) || userNumber < 0 || userNumber > maxNum) {
+            alert("Неверный ввод!")
+        } else {
+            i += 1
+            if (userNumber > num) {
+                alert("Моё число меньше")
+            } else if (userNumber < num) {
+                alert("Моё число больше")
+            } else {
+                alert("Поздравляю! Вы угадали! Количество попыток - " + i)
+                break
+            }
+        }
+    }
+</script>
