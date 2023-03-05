@@ -57,27 +57,27 @@ let cart = [
 ]
 
 function add_position(good, amount) {
-    for (let i=0; i<cart.length; i++) 
-      if (cart[i].good == good) { cart[i].amount += amount; return }
-    
-    cart.push({ good: good, amount: amount})
+    pos = cart.findIndex((elem, index, array) => elem.good == good)
+    if (pos >= 0) cart[pos].amount += amount
+    else cart.push({ good: good, amount: amount})
 }
 
 function del_position(good) {
-    for (let i=0; i<cart.length; i++)
-        if (cart[i].good == good) cart.splice(i, 1)
+    pos = cart.findIndex((elem, index, array) => elem.good == good)
+    if (pos >= 0) cart.splice(pos, 1)
 }
 
 function cartClean() { cart = [] }
 
 function cartCalc() {
     if (!cart.length) return { totalAmount: 0, totalSumm: 0 }
-    
+
     const amnt = cart.reduce((sum, item) => sum + item.amount, 0)
     let total = 0
-    for (let i=0; i<cart.length; i++)
-        for (let j=0; j<catalogue.length; j++)
-            if (catalogue[j].id == cart[i].good) { total += catalogue[j].price * cart[i].amount; break }
+    for (let i=0; i<cart.length; i++) {
+        pos = catalogue.findIndex((elem, index, array) => elem.id == cart[i].good)
+        if (pos >= 0) total += catalogue[pos].price * cart[i].amount
+    }
     
     return { totalAmount: amnt, totalSumm: total }
 }
@@ -85,7 +85,7 @@ function cartCalc() {
 add_position(2, 5)
 del_position(2)
 add_position(2, 5)
-add_position(4, 1)
+add_position(4, 2)
 console.log(cart)
 console.log(cartCalc())
 cartClean()
