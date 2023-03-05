@@ -57,29 +57,27 @@ let cart = [
 ]
 
 function add_position(good, amount) {
-    pos = cart.findIndex((elem, index, array) => elem.good == good)
+    let pos = cart.findIndex((elem, index, array) => elem.good == good)
     if (pos >= 0) cart[pos].amount += amount
-    else cart.push({ good: good, amount: amount})
+    else {
+        pos = catalogue.findIndex((elem, index, array) => elem.id == good)
+        if (pos >= 0) cart.push({ good: good, amount: amount})
+        else console.log('Cannot find good ' + good)
+    }
 }
 
 function del_position(good) {
-    pos = cart.findIndex((elem, index, array) => elem.good == good)
+    const pos = cart.findIndex((elem, index, array) => elem.good == good)
     if (pos >= 0) cart.splice(pos, 1)
 }
 
 function cartClean() { cart = [] }
 
 function cartCalc() {
-    if (!cart.length) return { totalAmount: 0, totalSumm: 0 }
-
-    const amnt = cart.reduce((sum, item) => sum + item.amount, 0)
-    let total = 0
-    for (let i=0; i<cart.length; i++) {
-        pos = catalogue.findIndex((elem, index, array) => elem.id == cart[i].good)
-        if (pos >= 0) total += catalogue[pos].price * cart[i].amount
+    return { 
+      totalAmount: cart.reduce((sum, item) => sum + item.amount, 0),
+      totalSumm: cart.reduce((sum, item) => sum + catalogue.find((elem, index, array) => elem.id == item.good).price * item.amount, 0)
     }
-    
-    return { totalAmount: amnt, totalSumm: total }
 }
 
 add_position(2, 5)
