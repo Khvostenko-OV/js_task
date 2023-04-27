@@ -3,13 +3,13 @@ const taskList = document.getElementById('tasks__list'),
       input = document.getElementById('task__input');
 
 function addTask(text) {
-    taskList.innerHTML += 
+    taskList.insertAdjacentHTML('beforeend',
         `<div class="task">
             <div class="task__title">${text}</div>
             <a href="#" class="task__remove">&times;</a>
-        </div>`;
+        </div>`);
 
-        const newTask = taskList.lastChild,
+    const newTask = taskList.lastChild,
           delButton = newTask.querySelector('.task__remove');
 
     delButton.onclick = () => {
@@ -24,9 +24,7 @@ function delTask(task) {
 }
 
 addButton.onclick = () => {
-    if (input.value) {
-        addTask(input.value);
-        input.value = '';
-    }
+    if (input.value.trim()) addTask(input.value);
+    input.value = '';
     return false;
 }
