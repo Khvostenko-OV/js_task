@@ -2,11 +2,10 @@ const items = document.getElementById('items'),
       loader = document.getElementById('loader'),
       xhr = new XMLHttpRequest();
 
-xhr.addEventListener('readystatechange', () => {
-    if (xhr.readyState === xhr.DONE) {
-        loader.className = 'loader';
+xhr.onload = () => {
+    loader.className = 'loader';
+    if (xhr.status == 200) {
         const resp = JSON.parse(xhr.responseText);
-        
         for (let val of Object.values(resp.response.Valute)) {
             items.innerHTML += 
                 `<div class="item">
@@ -15,8 +14,8 @@ xhr.addEventListener('readystatechange', () => {
                     <div class="item__currency">руб.</div>
                 </div>`;
         }
-    }
-})
+    } else { alert(`Error - ${xhr.status} ${xhr.statusText}`) }
+}
 
 xhr.open('GET', 'https://students.netoservices.ru/nestjs-backend/slow-get-courses');
 xhr.send();
