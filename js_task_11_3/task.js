@@ -9,7 +9,7 @@ file.addEventListener('change', () => { fileName.textContent = file.value; progr
 upload.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    xhr.upload.onprogress = (e) => { progress.value = e.total / e.loaded }
+    xhr.upload.onprogress = (e) => { progress.value = e.total / e.loaded; console.log(e.loaded) }
     xhr.onloadend = () => {
         if (xhr.status == 201) { 
             alert(`Success!`)
@@ -18,13 +18,7 @@ upload.addEventListener('submit', (e) => {
         }
     }
 
-// Это не работает. Статус 0
-// Дает ошибку Access to XMLHttpRequest at ‘file:///C:/form/’ from origin ‘null’ has been blocked by CORS policy
-//    const formData = new FormData(upload)
-//    xhr.open('POST', '/form/');
-//    xhr.send(formData);
-
-// Это работает нормально. Статус 201
     xhr.open('POST', upload.action);
-    xhr.send(file.files[0]);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send(new FormData(upload));
 })
