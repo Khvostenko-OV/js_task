@@ -11,19 +11,22 @@ function welcome(id) {
 signin.addEventListener('submit', (e) => {
     e.preventDefault();
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', signin.action, false);
+    xhr.open('POST', signin.action);
+    xhr.responseType = 'json';
     xhr.send(new FormData(signin));
-    for (item of signin.querySelectorAll('input')) { item.value = '' }
-    if (xhr.status == 201) {
-        resp = JSON.parse(xhr.responseText);
-        if (resp.success) {
-            welcome(resp.user_id);
-            localStorage.setItem('signin', resp.user_id);
+    signin.reset()
+
+    xhr.onload = () => {
+        if (xhr.status == 201) {
+            if (xhr.response.success) {
+                localStorage.setItem('signin', xhr.response.user_id);
+                welcome(xhr.response.user_id);
+            } else {
+                    alert('Неверный логин/пароль');
+            }
         } else {
-            alert('Неверный логин/пароль');
+            alert(`Ошибка - ${xhr.status} ${xhr.response.error} - ${xhr.response.message}`);
         }
-    } else { 
-        alert(`Ошибка - ${xhr.status} ` + xhr.responseText);
     }
 })
 

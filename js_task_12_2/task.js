@@ -7,4 +7,6 @@ close.onclick = () => {
 }
 
 const cookie = document.cookie.split('; ');
-if (!cookie.find(item => item.startsWith('modalClose='))) { modal.className = 'modal modal_active'; }
+if (!cookie.find(item => item.startsWith('modalClose='))) { 
+    modal.className = 'modal modal_active'; 
+}
